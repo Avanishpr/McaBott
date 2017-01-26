@@ -23,8 +23,9 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.graphics.Typeface;
 
-public class MainActivity extends AppCompatActivity {
 
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,20 +33,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-    final MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(this.getApplicationContext(), "tcp://test.mosquitto.org:1883", "androidSampleClient");
+    //final MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(this.getApplicationContext(), "tcp://test.mosquitto.org:1883", "androidSampleClient");
 
     public void controller(View view) {
 
-        RadioButton run = (RadioButton) findViewById(R.id.radioButton);
-        RadioButton stop = (RadioButton) findViewById(R.id.radioButton2);
+        final RadioButton run = (RadioButton) findViewById(R.id.radioButton);
+        final RadioButton stop = (RadioButton) findViewById(R.id.radioButton2);
         Button forward = (Button) findViewById(R.id.button);
         Button left = (Button) findViewById(R.id.button2);
         Button right = (Button) findViewById(R.id.button3);
         Button back = (Button) findViewById(R.id.button4);
         //final Run runn = new Run();
 
-        boolean checked = ((RadioButton) view).isChecked(); //is the radio button checked
-
+        final boolean checked = ((RadioButton) view).isChecked(); //is the radio button checked
+        final MqttAndroidClient mqttAndroidClient = new MqttAndroidClient(this.getApplicationContext(), "tcp://test.mosquitto.org:1883", "androidSampleClient");
         //final Control control = new Control();
 
         switch (view.getId())
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     stop.setChecked(false);
                     //runn.connect();
                     try {
+
                         mqttAndroidClient.connect(null, new IMqttActionListener() {
                             @Override
                             public void onSuccess(IMqttToken asyncActionToken) {
@@ -76,78 +78,118 @@ public class MainActivity extends AppCompatActivity {
                                 System.out.println("Connection Failure!");
                             }
                         });
-                    } catch (MqttException ex) {
-
-                    }
-                    //publish("FOR");
-                    //*Intent NewActivity = new Intent(this, Run.class);
-                    //startActivity(NewActivity);*//*
-
-                    switch (view.getId()) {
-                        case R.id.button:
-                            try {
-                                mqttAndroidClient.publish("mcabot", new MqttMessage("F".getBytes()));
-                                System.out.println("Fwd pressed");
-                            }
-                            catch (MqttException ex) {
-                            }
-                            break;
-
-                        case R.id.button2:
-                            try {
-                                mqttAndroidClient.publish("mcabot", new MqttMessage("L".getBytes()));
-                                System.out.println("Left pressed");
-
-                            }
-                            catch (MqttException ex) {
-                            }
-                            break;
-
-                        case R.id.button3:
-                            try {
-                                mqttAndroidClient.publish("mcabot", new MqttMessage("R".getBytes()));
-                                System.out.println("Right pressed");
-                            }
-                            catch (MqttException ex) {
-                            }
-                            break;
-
-                        case R.id.button4:
-                            try {
-                                mqttAndroidClient.publish("mcabot", new MqttMessage("B".getBytes()));
-                                System.out.println("Back pressed");
-                            }
-                            catch (MqttException ex) {
-                            }
-                            break;
-
-                        default:
-                            System.out.println("wrong button pressed");
-                    }
-                    break;
+                    } catch (MqttException ex) {}
                 }
+                break;
 
-            case R.id.radioButton2:
+            /*case R.id.radioButton2:
                 if (checked) {
                     stop.setTypeface(null, Typeface.BOLD_ITALIC);
                     run.setChecked(false);
-                    //publish("STOP published");
-                    //*Intent NewActivity = new Intent(this, Stop.class);
-                    //startActivity(NewActivity);*//*
+
                 }
-                break;
+                break;*/
             //default: break;
         }
+
+       /* run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                run.setTypeface(null, Typeface.BOLD_ITALIC);
+                stop.setChecked(false);
+
+                try {
+
+                    mqttAndroidClient.connect(null, new IMqttActionListener() {
+                        @Override
+                        public void onSuccess(IMqttToken asyncActionToken) {
+                            System.out.println("Connection Success!");
+                            try {
+                                System.out.println("Subscribing to mcabot");
+                                mqttAndroidClient.subscribe("mcabot", 0);
+                                System.out.println("Subscribed to mcabot");
+                                System.out.println("Publishing message..");
+                                mqttAndroidClient.publish("mcabot", new MqttMessage("Welcome to mcabot control".getBytes()));
+
+                            } catch (MqttException ex) {
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                            System.out.println("Connection Failure!");
+                        }
+                    });
+                } catch (MqttException ex) {}
+            }
+        });*/
+
+
+        stop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stop.setTypeface(null, Typeface.BOLD_ITALIC);
+                run.setChecked(false);
+                System.out.println("Stop pressed");
+                try {mqttAndroidClient.publish("mcabot", new MqttMessage("s".getBytes()));}
+                catch (MqttException ex) {}
+            }
+        });
+
+
+        forward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(run.isChecked())
+                {
+                    System.out.println("Fwd pressed");
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("f".getBytes()));}
+                    catch (MqttException ex) {}
+                }
+            }
+        });
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(run.isChecked())
+                {
+                    System.out.println("Left pressed");
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("l".getBytes()));}
+                    catch (MqttException ex) {}
+                }
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(run.isChecked())
+                {
+                    System.out.println("Right pressed");
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("r".getBytes()));}
+                    catch (MqttException ex) {}
+                }
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(run.isChecked())
+                {
+                    System.out.println("Back pressed");
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("b".getBytes()));}
+                    catch (MqttException ex) {}
+                }
+            }
+        });
     }
 }
-  /*  public void publish(String command) {
-        String topic = "robo/ctrl/";
-        MqttMessage message = new MqttMessage(command.getBytes());
-        message.setQos(2);
-        clientt.publish(topic, message);
-        //mqttClient.publish(topic, message);
-    }*/
-
 
 
 
