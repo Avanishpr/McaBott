@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 stop.setTypeface(null, Typeface.BOLD_ITALIC);
                 run.setChecked(false);
                 System.out.println("Stop pressed");
-                try {mqttAndroidClient.publish("mcabot", new MqttMessage("s".getBytes()));}
+                try {mqttAndroidClient.publish("mcabot", new MqttMessage("remote:s".getBytes()));}
                 catch (MqttException ex) {}
             }
         });
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 if(run.isChecked())
                 {
                     System.out.println("Fwd pressed");
-                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("f".getBytes()));}
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("remote:f".getBytes()));}
                     catch (MqttException ex) {}
                 }
             }
@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 if(run.isChecked())
                 {
                     System.out.println("Left pressed");
-                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("l".getBytes()));}
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("remote:l".getBytes()));}
                     catch (MqttException ex) {}
                 }
             }
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 if(run.isChecked())
                 {
                     System.out.println("Right pressed");
-                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("r".getBytes()));}
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("remote:r".getBytes()));}
                     catch (MqttException ex) {}
                 }
             }
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 if(run.isChecked())
                 {
                     System.out.println("Back pressed");
-                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("b".getBytes()));}
+                    try {mqttAndroidClient.publish("mcabot", new MqttMessage("remote:b".getBytes()));}
                     catch (MqttException ex) {}
                 }
             }
